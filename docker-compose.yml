@@ -1,35 +1,34 @@
-version: '3' # กำหนด docker version
+version: '3.8' # กำหนด docker version
 services:
-  node-server:
-    container_name: node
-    build: .
-    ports:
-      - "8000:8000"
-    depends_on:
-      - db
   db:
-    image: mysql:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: db
     environment:
+      TZ: Asia/Bangkok
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: tutorial
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: ltsproject
+      MYSQL_USER: ltsproject
+      MYSQL_PASSWORD: simplePassword
     ports:
       - "3306:3306"
     volumes:
-      - mysql_data_test:/var/lib/mysql
+      - mysql_data_ltsproject:/var/lib/mysql
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
     container_name: phpmyadmin
     environment:
       PMA_HOST: db
       PMA_PORT: 3306
-      PMA_USER: root
-      PMA_PASSWORD: root
+      PMA_USER: ltsproject
+      PMA_PASSWORD: simplePassword
     ports:
       - "8080:80"
     depends_on:
       - db
 
 volumes:
-  mysql_data_test: # กำหนดชื่อ volume ที่ต้องการจะสร้าง
+  mysql_data_ltsproject: # กำหนดชื่อ volume ที่ต้องการจะสร้าง
     driver: local

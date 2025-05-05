@@ -1,13 +1,3 @@
-FROM node:18
+FROM mariadb:10.11.2
 
-WORKDIR /usr/src/app
-
-COPY package.json ./
-
-RUN npm install
-
-COPY ./index.js ./
-
-EXPOSE 8000
-
-CMD [ "node", "index.js" ]
+COPY ./db/ltsproject.sql /docker-entrypoint-initdb.d/
