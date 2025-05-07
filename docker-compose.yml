@@ -1,34 +1,28 @@
 version: '3.8' # กำหนด docker version
 services:
-  db:
+  postgres:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: db
+    container_name: hrm-dev
+    restart: always
     environment:
       TZ: Asia/Bangkok
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_ROOT_HOST: '%'
-      MYSQL_DATABASE: ltsproject
-      MYSQL_USER: ltsproject
-      MYSQL_PASSWORD: simplePassword
+      POSTGRES_DB: ltsproject
+      POSTGRES_USER: ltsproject
+      POSTGRES_PASSWORD: simplePassword
+      POSTGRES_MULTIPLE_DATABASES: ltsproject
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "ltsproject"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - mysql_data_ltsproject:/var/lib/mysql
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
-    container_name: phpmyadmin
-    environment:
-      PMA_HOST: db
-      PMA_PORT: 3306
-      PMA_USER: ltsproject
-      PMA_PASSWORD: simplePassword
-    ports:
-      - "8080:80"
-    depends_on:
-      - db
+      - postgres_data_ltsproject:/var/lib/postgresql/data
 
 volumes:
-  mysql_data_ltsproject: # กำหนดชื่อ volume ที่ต้องการจะสร้าง
+  postgres_data_ltsproject: # กำหนดชื่อ volume ที่ต้องการจะสร้าง
     driver: local
