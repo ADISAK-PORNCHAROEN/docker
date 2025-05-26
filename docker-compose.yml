@@ -26,3 +26,7 @@ services:
 volumes:
   postgres_data_ltsproject: # กำหนดชื่อ volume ที่ต้องการจะสร้าง
     driver: local
+
+networks:
+  pgloader-network:
+    external: true

@@ -1,0 +1,14 @@
+LOAD DATABASE
+    FROM mysql://ltsproject:simplePassword@192.168.1.152:3306/ltsproject
+    INTO postgresql://ltsproject:simplePassword@192.168.1.152:5432/ltsproject
+
+WITH include drop, create tables, create indexes, reset sequences
+    set work_mem to '128MB', maintenance_work_mem to '512MB'
+
+SET MySQL PARAMETERS
+    net_read_timeout = '1200',
+    net_write_timeout = '1200'
+
+SET PostgreSQL PARAMETERS
+    maintenance_work_mem to '512MB',
+    work_mem to '128MB';
